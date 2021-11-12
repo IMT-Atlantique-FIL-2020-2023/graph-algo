@@ -8,6 +8,9 @@ import GraphAlgorithms.GraphTools;
 import Nodes.DirectedNode;
 import Abstraction.IDirectedGraph;
 
+/**
+ * Graphs directed
+ */
 public class DirectedGraph extends AbstractListGraph<DirectedNode> implements IDirectedGraph {
 
     private static int _DEBBUG = 0;
