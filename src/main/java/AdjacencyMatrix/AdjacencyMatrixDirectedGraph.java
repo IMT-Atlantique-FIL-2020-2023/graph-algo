@@ -5,6 +5,7 @@ import GraphAlgorithms.GraphTools;
 import Nodes.AbstractNode;
 import Nodes.DirectedNode;
 import Abstraction.IDirectedGraph;
+import Nodes.UndirectedNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +77,7 @@ public class AdjacencyMatrixDirectedGraph extends AbstractMatrixGraph<DirectedNo
 	
 	@Override
 	public boolean isArc(DirectedNode from, DirectedNode to) {
-		// A completer
-		return true;
+		return this.matrix[from.getLabel()][to.getLabel()] >= 1;
 	}
 
 	/**
@@ -85,7 +85,8 @@ public class AdjacencyMatrixDirectedGraph extends AbstractMatrixGraph<DirectedNo
 	 */
 	@Override
 	public void removeArc(DirectedNode from, DirectedNode to) {
-		// A completer
+		if(isArc(from,to))
+			this.matrix[from.getLabel()][to.getLabel()]--;
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class AdjacencyMatrixDirectedGraph extends AbstractMatrixGraph<DirectedNo
 	 */
 	@Override
 	public void addArc(DirectedNode from, DirectedNode to) {
-		// A completer
+		this.matrix[from.getLabel()][to.getLabel()]++;
 	}
 
 
@@ -144,6 +145,13 @@ public class AdjacencyMatrixDirectedGraph extends AbstractMatrixGraph<DirectedNo
 		for (Integer integer : t2) {
 			System.out.print(integer + ", ");
 		}
-		// A completer
+
+		System.out.println("test isEdge true = " + am.isArc(new DirectedNode(2), new DirectedNode(5)));
+		System.out.println("test isEdge false = " + am.isArc(new DirectedNode(0), new DirectedNode(0)));
+		am.addArc(new DirectedNode(0), new DirectedNode(0));
+		System.out.println("test isEdge true = " + am.isArc(new DirectedNode(0), new DirectedNode(0)));
+		am.removeArc(new DirectedNode(0), new DirectedNode(0));
+		System.out.println("test removeEdge ok si false = " + am.isArc(new DirectedNode(0), new DirectedNode(0)));
+
 	}
 }

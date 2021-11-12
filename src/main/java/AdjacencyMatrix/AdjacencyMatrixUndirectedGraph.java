@@ -64,11 +64,14 @@ public class AdjacencyMatrixUndirectedGraph extends AbstractMatrixGraph<Undirect
 	// ------------------------------------------------
 	// 					Methods 
 	// ------------------------------------------------		
-	
+
+	/**
+	 * Edge = arête
+	 * >= 1 car on est en multi graph (on peut avoir plusieurs arêtes entre deux noeuds
+	 */
 	@Override
 	public boolean isEdge(UndirectedNode x, UndirectedNode y) {
-		// A completer
-		return true;		
+		return this.matrix[x.getLabel()][y.getLabel()] >= 1 && this.matrix[y.getLabel()][x.getLabel()] >= 1;
 	}
 	
 	/**
@@ -76,7 +79,10 @@ public class AdjacencyMatrixUndirectedGraph extends AbstractMatrixGraph<Undirect
      */
 	@Override
 	public void removeEdge(UndirectedNode x, UndirectedNode y) {
-		// A completer
+		if(isEdge(x,y)) {
+			this.matrix[x.getLabel()][y.getLabel()]--;
+			this.matrix[y.getLabel()][x.getLabel()]--;
+		}
 	}
 
 	/**
@@ -84,7 +90,8 @@ public class AdjacencyMatrixUndirectedGraph extends AbstractMatrixGraph<Undirect
      */
 	@Override
 	public void addEdge(UndirectedNode x, UndirectedNode y) {
-		// A completer
+		this.matrix[x.getLabel()][y.getLabel()]++;
+		this.matrix[y.getLabel()][x.getLabel()]++;
 	}
 
 	
@@ -125,5 +132,13 @@ public class AdjacencyMatrixUndirectedGraph extends AbstractMatrixGraph<Undirect
 		am.removeEdge(new UndirectedNode(2), new UndirectedNode(5));
 		System.out.println(am);
 		// A completer
+
+		System.out.println("test isEdge true = " + am.isEdge(new UndirectedNode(2), new UndirectedNode(5)));
+		System.out.println("test isEdge false = " + am.isEdge(new UndirectedNode(0), new UndirectedNode(0)));
+		am.addEdge(new UndirectedNode(0), new UndirectedNode(0));
+		System.out.println("test isEdge true = " + am.isEdge(new UndirectedNode(0), new UndirectedNode(0)));
+		am.removeEdge(new UndirectedNode(0), new UndirectedNode(0));
+		System.out.println("test removeEdge ok si false = " + am.isEdge(new UndirectedNode(0), new UndirectedNode(0)));
+
 	}
 }

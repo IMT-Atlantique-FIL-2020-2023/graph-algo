@@ -8,6 +8,7 @@ import GraphAlgorithms.GraphTools;
 import Nodes.UndirectedNode;
 import Abstraction.IUndirectedGraph;
 
+//cf page 25 du cours 1
 public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implements IUndirectedGraph {
 
     //--------------------------------------------------
@@ -73,15 +74,16 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
 
     @Override
     public boolean isEdge(UndirectedNode x, UndirectedNode y) {  
-    	return getNodeOfList(x).getNeighbours().containsKey(getNodeOfList(y));
         // A completer
-    	//return true;
+        return getNodeOfList(x).getNeighbours().containsKey(getNodeOfList(y));
     }
 
     @Override
     public void removeEdge(UndirectedNode x, UndirectedNode y) {
     	if(isEdge(x,y)){
     		// A completer
+            x.getNeighbours().remove(y);
+            y.getNeighbours().remove(x);
     	}
     }
 
@@ -89,6 +91,8 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
     public void addEdge(UndirectedNode x, UndirectedNode y) {
     	if(!isEdge(x,y)){
     		// A completer
+            x.addNeigh(y, 0);
+            y.addNeigh(x, 0);
     	}
     }
 

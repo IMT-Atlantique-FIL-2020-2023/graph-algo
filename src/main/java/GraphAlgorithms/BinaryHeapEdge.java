@@ -31,7 +31,20 @@ public class BinaryHeapEdge {
 	 * @param val the edge weight
 	 */
     public void insert(UndirectedNode from, UndirectedNode to, int val) {
-    	// To complete
+    	if(isEmpty()) {
+			binh.add(new Triple<>(from, to, val));
+		} else {
+			binh.add(new Triple<>(from, to, val));
+
+			int dest = binh.size() - 1;
+			int src = (dest -1)/2;
+
+			while(dest > 0 && binh.get(src).getThird() > binh.get(dest).getThird()) {
+				swap(src, dest);
+				dest = src;
+				src = (src -1)/2;
+			}
+		}
     }
 
     
@@ -42,9 +55,28 @@ public class BinaryHeapEdge {
 	 * 
 	 */
     public Triple<UndirectedNode,UndirectedNode,Integer> remove() {
-    	// To complete
-    	return null;
-        
+    	if(binh.size() <= 0) {
+			return null;
+		} else if(binh.size() == 1) {
+    		return binh.remove(0);
+		} else {
+			//Echanger la racine avec la dernière feuille
+			swap(0, binh.size()-1);
+
+			//replacer la nouvelle racine
+			Triple<UndirectedNode, UndirectedNode, Integer> valRoot = binh.remove(binh.size()-1);
+			int posElement = 0; //position de l'élément à replacer
+			int dest = getBestChildPos(posElement);
+
+			System.out.println("Remove() ");
+			while(dest != -1 && dest < binh.size() && binh.get(posElement).getThird() >= binh.get(dest).getThird()) {
+				swap(posElement, dest);
+				posElement = dest;
+				dest = getBestChildPos(posElement);
+			}
+
+			return valRoot;
+		}
     }
     
 
@@ -55,18 +87,24 @@ public class BinaryHeapEdge {
 	 * @return the index of the child edge with the least weight
 	 */
     private int getBestChildPos(int src) {
-    	int lastIndex = binh.size()-1; 
         if (isLeaf(src)) { // the leaf is a stopping case, then we return a default value
-            return Integer.MAX_VALUE;
+            return -1;
         } else {
-        	// To complete
-        	return Integer.MAX_VALUE;
+			if(2*src+2 >= binh.size()) {
+				return 2*src+1;
+			} else {
+				if(binh.get(2*src+1).getThird() <= binh.get(2*src+2).getThird()) {
+					return 2*src+1;
+				} else {
+					return 2*src+2;
+				}
+
+			}
         }
     }
 
     private boolean isLeaf(int src) {
-    	// A completer
-    	return false;
+    	return 2*src+1 >= binh.size() - 1;
     }
 
     
@@ -171,9 +209,14 @@ public class BinaryHeapEdge {
             jarjarBin.insert(new UndirectedNode(k), new UndirectedNode(k+30), rand);            
             k--;
         }
-        // A completer
-        
+
         System.out.println(jarjarBin.test());
+        jarjarBin.lovelyPrinting();
+
+        jarjarBin.remove();
+		jarjarBin.lovelyPrinting();
+		jarjarBin.remove();
+		jarjarBin.lovelyPrinting();
     }
 
 }

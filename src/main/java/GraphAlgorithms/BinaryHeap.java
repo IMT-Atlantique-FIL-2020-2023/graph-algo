@@ -1,72 +1,116 @@
 package GraphAlgorithms;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BinaryHeap {
 
-    private int[] nodes;
-    private int pos;
+    private List<Integer> nodes;
 
     public BinaryHeap() {
-        this.nodes = new int[32];
-        for (int i = 0; i < nodes.length; i++) {
-            this.nodes[i] = Integer.MAX_VALUE;
-        }
-        this.pos = 0;
+        this.nodes = new ArrayList<Integer>();
+
     }
 
-    public void resize() {
-        int[] tab = new int[this.nodes.length + 32];
-        for (int i = 0; i < nodes.length; i++) {
+/*    public void resize() {
+        int[] tab = new int[this.nodes.size + 32];
+        for (int i = 0; i < nodes.size; i++) {
             tab[i] = Integer.MAX_VALUE;
         }
         System.arraycopy(this.nodes, 0, tab, 0, this.nodes.length);
         this.nodes = tab;
-    }
+    }*/
 
     public boolean isEmpty() {
-        return pos == 0;
+        return nodes.size() == 0;
     }
 
+    //On ne swap pas si la valeur du parent = element
     public void insert(int element) {
-    	// A completer
+    	this.nodes.add(element);
+
+        int posElement = nodes.lastIndexOf(element);
+    	int posFather = (posElement - 1)/2;
+
+    	while(nodes.get(posElement) < nodes.get(posFather)) {
+    	    swap(posFather, posElement);
+
+    	    posElement = posFather;
+    	    posFather = (posElement - 1)/2;
+        }
     }
 
     public int remove() {
-    	// A completer
-    	return 0;
+        if(nodes.size() <= 0) {
+            return -1;
+        } else if(nodes.size() == 1) {
+            return nodes.remove(0);
+        } else {
+            //Echanger la racine avec la dernière feuille
+            swap(0, nodes.size()-1);
+
+            //replacer la nouvelle racine
+            int valRoot = nodes.remove(nodes.size()-1);
+            int posElement = 0; //position de l'élément à replacer
+            int dest = getBestChildPos(posElement);
+
+            System.out.println("Remove() ");
+            while(dest != -1 && dest < nodes.size() && nodes.get(posElement) >= nodes.get(dest)) {
+                swap(posElement, dest);
+                posElement = dest;
+                dest = getBestChildPos(posElement);
+            }
+
+            return valRoot;
+        }
     }
 
+    /**
+     * Retourne l'indice du meilleur des deux fils comparés entre eux (dans le cas ou fils2 existe)
+     * @param src
+     * @return
+     */
     private int getBestChildPos(int src) {
         if (isLeaf(src)) { // the leaf is a stopping case, then we return a default value
-            return Integer.MAX_VALUE;
+            return -1;
         } else {
-        	// A completer
-        	return Integer.MAX_VALUE;
+            if(2*src+2 >= nodes.size()) {
+                return 2*src+1;
+            } else {
+                if(nodes.get(2*src+1) <= nodes.get(2*src+2)) {
+                    return 2*src+1;
+                } else {
+                    return 2*src+2;
+                }
+
+            }
         }
     }
 
     
     /**
 	 * Test if the node is a leaf in the binary heap
-	 * 
+	 *
+     * Rq:Pas besoin de tester le second fils, si le 1er est une feuille, alors le second l'est
+     *
 	 * @returns true if it's a leaf or false else
 	 * 
 	 */	
     private boolean isLeaf(int src) {
-    	// A completer
-    	return false;
+    	return 2*src+1 >= nodes.size();
     }
 
     private void swap(int father, int child) {
-        int temp = nodes[father];
-        nodes[father] = nodes[child];
-        nodes[child] = temp;
+        int temp = nodes.get(father);
+        nodes.set(father, nodes.get(child));
+        nodes.set(child, temp);
     }
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (int i = 0; i < pos; i++) {
-            s.append(nodes[i]).append(", ");
+        for (int i = 0; i < nodes.size(); i++) {
+            s.append(nodes.get(i)).append(", ");
         }
         return s.toString();
     }
@@ -87,10 +131,10 @@ public class BinaryHeap {
         } else {
             int left = 2 * root + 1;
             int right = 2 * root + 2;
-            if (right >= pos) {
-                return nodes[left] >= nodes[root] && testRec(left);
+            if (right >= nodes.size()) {
+                return nodes.get(left) >= nodes.get(root) && testRec(left);
             } else {
-                return nodes[left] >= nodes[root] && testRec(left) && nodes[right] >= nodes[root] && testRec(right);
+                return nodes.get(left) >= nodes.get(root) && testRec(left) && nodes.get(right) >= nodes.get(root) && testRec(right);
             }
         }
     }
@@ -105,11 +149,18 @@ public class BinaryHeap {
         while (k > 0) {
             int rand = min + (int) (Math.random() * ((max - min) + 1));
             System.out.print("insert " + rand);
-            jarjarBin.insert(rand);            
+            jarjarBin.insert(rand);
             k--;
         }
      // A completer
         System.out.println("\n" + jarjarBin);
+        System.out.println(jarjarBin.test());
+
+        jarjarBin.remove();
+        System.out.println("\n avec 1 removes " + jarjarBin);
+        System.out.println(jarjarBin.test());
+        jarjarBin.remove();
+        System.out.println("\n avec 2 removes " + jarjarBin);
         System.out.println(jarjarBin.test());
     }
 

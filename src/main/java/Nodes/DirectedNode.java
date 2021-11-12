@@ -9,7 +9,7 @@ public class DirectedNode extends AbstractNode {
     // 				Class variables
     //--------------------------------------------------
 
-    private Map<DirectedNode, Integer> succs;
+    private Map<DirectedNode, Integer> succs; //(noeud suivant, poid de l'arête)
     private Map<DirectedNode, Integer> preds;
 
     //--------------------------------------------------

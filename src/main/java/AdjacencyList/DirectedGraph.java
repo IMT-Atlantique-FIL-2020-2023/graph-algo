@@ -70,17 +70,21 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
     @Override
     public boolean isArc(DirectedNode from, DirectedNode to) {
     	// A completer
-    	return false;
+    	return from.getSuccs().containsKey(to) && to.getPreds().containsKey(from);
     }
 
     @Override
     public void removeArc(DirectedNode from, DirectedNode to) {
     	// A completer
+        from.getSuccs().remove(to);
+        to.getPreds().remove(from);
     }
 
     @Override
     public void addArc(DirectedNode from, DirectedNode to) {
     	// A completer
+        from.addSucc(to, 0);
+        to.addPred(from, 0);
     }
 
     //--------------------------------------------------

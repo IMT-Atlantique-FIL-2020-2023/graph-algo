@@ -40,6 +40,10 @@ public class UndirectedValuedGraph extends UndirectedGraph{
      */
     public void addEdge(UndirectedNode x, UndirectedNode y, int cost) {
     	// A completer
+        if(!isEdge(x,y)) {
+            x.addNeigh(y, cost);
+            y.addNeigh(x, cost);
+        }
     }
     
     @Override
