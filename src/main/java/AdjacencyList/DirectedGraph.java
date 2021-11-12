@@ -13,16 +13,16 @@ import Abstraction.IDirectedGraph;
  */
 public class DirectedGraph extends AbstractListGraph<DirectedNode> implements IDirectedGraph {
 
-	private static int _DEBBUG =0;
-		
+    private static int _DEBBUG = 0;
+
     //--------------------------------------------------
     // 				Constructors
     //--------------------------------------------------
 
-	public DirectedGraph(){
-		super();
-		this.nodes = new ArrayList<DirectedNode>();
-	}
+    public DirectedGraph() {
+        super();
+        this.nodes = new ArrayList<DirectedNode>();
+    }
 
     public DirectedGraph(int[][] matrix) {
         this.order = matrix.length;
@@ -32,10 +32,10 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
         }
         for (DirectedNode n : this.getNodes()) {
             for (int j = 0; j < matrix[n.getLabel()].length; j++) {
-            	DirectedNode nn = this.getNodes().get(j);
+                DirectedNode nn = this.getNodes().get(j);
                 if (matrix[n.getLabel()][j] != 0) {
-                    n.getSuccs().put(nn,0);
-                    nn.getPreds().put(n,0);
+                    n.getSuccs().put(nn, 0);
+                    nn.getPreds().put(n, 0);
                     this.m++;
                 }
             }
@@ -47,15 +47,15 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
         this.nodes = new ArrayList<>();
         this.order = g.getNbNodes();
         this.m = g.getNbArcs();
-        for(DirectedNode n : g.getNodes()) {
+        for (DirectedNode n : g.getNodes()) {
             this.nodes.add(makeNode(n.getLabel()));
         }
         for (DirectedNode n : g.getNodes()) {
-        	DirectedNode nn = this.getNodes().get(n.getLabel());
+            DirectedNode nn = this.getNodes().get(n.getLabel());
             for (DirectedNode sn : n.getSuccs().keySet()) {
                 DirectedNode snn = this.getNodes().get(sn.getLabel());
-                nn.getSuccs().put(snn,0);
-                snn.getPreds().put(nn,0);
+                nn.getSuccs().put(snn, 0);
+                snn.getPreds().put(nn, 0);
             }
         }
 
@@ -72,22 +72,24 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
 
     @Override
     public boolean isArc(DirectedNode from, DirectedNode to) {
-    	// A completer
-    	return from.getSuccs().containsKey(to) && to.getPreds().containsKey(from);
+        // A completer
+        return getNodeOfList(from).getSuccs().containsKey(to) && getNodeOfList(to).getPreds().containsKey(from);
     }
 
     @Override
     public void removeArc(DirectedNode from, DirectedNode to) {
-    	// A completer
-        from.getSuccs().remove(to);
-        to.getPreds().remove(from);
+        // A completer
+        if (isArc(from, to)) {
+            this.nodes.get(from.getLabel()).getSuccs().remove(to);
+            this.nodes.get(to.getLabel()).getSuccs().remove(from);
+        }
     }
 
     @Override
     public void addArc(DirectedNode from, DirectedNode to) {
-    	// A completer
-        from.addSucc(to, 0);
-        to.addPred(from, 0);
+        // A completer
+        this.nodes.get(from.getLabel()).addSucc(to, 0);
+        this.nodes.get(to.getLabel()).addPred(from, 0);
     }
 
     //--------------------------------------------------
@@ -96,6 +98,7 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
 
     /**
      * Method to generify node creation
+     *
      * @param label of a node
      * @return a node typed by A extends DirectedNode
      */
@@ -132,13 +135,13 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
         // A completer
         return g;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder s = new StringBuilder();
-        for(DirectedNode n : nodes){
+        for (DirectedNode n : nodes) {
             s.append("successors of ").append(n).append(" : ");
-            for(DirectedNode sn : n.getSuccs().keySet()){
+            for (DirectedNode sn : n.getSuccs().keySet()) {
                 s.append(sn).append(" ");
             }
             s.append("\n");

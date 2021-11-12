@@ -15,11 +15,11 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
     // 				Constructors
     //--------------------------------------------------
 
-	public UndirectedGraph() {
-		 this.nodes = new ArrayList<>();
-	}
-	
-	public UndirectedGraph(List<UndirectedNode> nodes) {
+    public UndirectedGraph() {
+        this.nodes = new ArrayList<>();
+    }
+
+    public UndirectedGraph(List<UndirectedNode> nodes) {
         super(nodes);
         for (UndirectedNode i : nodes) {
             this.m += i.getNbNeigh();
@@ -34,10 +34,10 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
         }
         for (UndirectedNode n : this.getNodes()) {
             for (int j = n.getLabel(); j < matrix[n.getLabel()].length; j++) {
-            	UndirectedNode nn = this.getNodes().get(j);
+                UndirectedNode nn = this.getNodes().get(j);
                 if (matrix[n.getLabel()][j] != 0) {
-                    n.getNeighbours().put(nn,0);
-                    nn.getNeighbours().put(n,0);
+                    n.getNeighbours().put(nn, 0);
+                    nn.getNeighbours().put(n, 0);
                     this.m++;
                 }
             }
@@ -53,11 +53,11 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
             this.nodes.add(makeNode(n.getLabel()));
         }
         for (UndirectedNode n : g.getNodes()) {
-        	UndirectedNode nn = this.getNodes().get(n.getLabel());
+            UndirectedNode nn = this.getNodes().get(n.getLabel());
             for (UndirectedNode sn : n.getNeighbours().keySet()) {
-            	UndirectedNode snn = this.getNodes().get(sn.getLabel());
-                nn.getNeighbours().put(snn,0);
-                snn.getNeighbours().put(nn,0);
+                UndirectedNode snn = this.getNodes().get(sn.getLabel());
+                nn.getNeighbours().put(snn, 0);
+                snn.getNeighbours().put(nn, 0);
             }
         }
 
@@ -73,35 +73,36 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
     }
 
     @Override
-    public boolean isEdge(UndirectedNode x, UndirectedNode y) {  
+    public boolean isEdge(UndirectedNode x, UndirectedNode y) {
         // A completer
         return getNodeOfList(x).getNeighbours().containsKey(getNodeOfList(y));
     }
 
     @Override
     public void removeEdge(UndirectedNode x, UndirectedNode y) {
-    	if(isEdge(x,y)){
-    		// A completer
-            x.getNeighbours().remove(y);
-            y.getNeighbours().remove(x);
-    	}
+        if (isEdge(x, y)) {
+            // A completer
+            this.nodes.get(x.getLabel()).getNeighbours().remove(y);
+            this.nodes.get(y.getLabel()).getNeighbours().remove(x);
+        }
     }
 
     @Override
     public void addEdge(UndirectedNode x, UndirectedNode y) {
-    	if(!isEdge(x,y)){
-    		// A completer
-            x.addNeigh(y, 0);
-            y.addNeigh(x, 0);
-    	}
+        if (!isEdge(x, y)) {
+            // A completer
+            this.nodes.get(x.getLabel()).getNeighbours().put(y, 0);
+            this.nodes.get(y.getLabel()).getNeighbours().put(x, 0);
+        }
     }
 
     //--------------------------------------------------
     // 					Methods
     //--------------------------------------------------
-    
+
     /**
      * Method to generify node creation
+     *
      * @param label of a node
      * @return a node typed by A extends UndirectedNode
      */
@@ -116,7 +117,7 @@ public class UndirectedGraph extends AbstractListGraph<UndirectedNode> implement
     public UndirectedNode getNodeOfList(UndirectedNode src) {
         return this.getNodes().get(src.getLabel());
     }
-    
+
     /**
      * @return the adjacency matrix representation int[][] of the graph
      */
