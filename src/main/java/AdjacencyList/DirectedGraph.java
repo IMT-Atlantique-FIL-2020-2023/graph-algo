@@ -129,7 +129,6 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
         return matrix;
     }
 
-    //TODO
     @Override
     public IDirectedGraph computeInverse() {
         DirectedGraph g = new DirectedGraph(this);

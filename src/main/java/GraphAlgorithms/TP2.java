@@ -1,7 +1,9 @@
 package GraphAlgorithms;
 
+import Abstraction.IDirectedGraph;
 import AdjacencyList.DirectedGraph;
 import AdjacencyList.UndirectedGraph;
+import Nodes.DirectedNode;
 import Nodes.UndirectedNode;
 
 import java.util.*;
@@ -17,21 +19,11 @@ public class TP2 {
     // 	  Algorithme de parcours en profondeur
     // ------------------------------------------
 
-    /*Algorithme parcours_profondeur(G, s, visited)
-        visited[v]=True
-        Ecrire(v)
-        pour chaque voisin v de u faire
-            SI visited[v]=False ALORS
-                parcours_profondeur(G, v, visited)
-            FinSi
-        FinPour
-    FinAlgorithme*/
-
     /**
      * Algorithme du parcours en profondeur avec tableau de booleens
      * @param g     graphe à étudier
      * @param s     sommet de départ
-     * @deprecated
+     * @deprecated cf parcoursProfondeurUndirected
      */
     public static void parcoursProfondeur(UndirectedGraph g, UndirectedNode s) {
         //Initialiser le tableau de booleans indiquant si un noeud a été parcouru
@@ -44,10 +36,10 @@ public class TP2 {
     }
 
     /**
-     * Algorithme du parcours en profondeur avec tableau de booeleens
+     * Algorithme du parcours en profondeur d'un graphe non orienté avec tableau de booeleens
      * @param s         sommet visité à cette itération
      * @param visited   tableau des noeuds parcourus
-     * @deprecated
+     * @deprecated cf parcoursProfondeurUndirected
      */
     private static void visiterParcoursProfondeur(UndirectedNode s, boolean[] visited) {
         visited[s.getLabel()] = false;
@@ -63,16 +55,28 @@ public class TP2 {
 
 
     /**
-     * Algorithme du parcours en profondeur à partir de l'algorithme ExplorerGraphe()
+     * Algorithme du parcours en profondeur d'un graphe non orienté à partir de l'algorithme ExplorerGraphe()
      * @param g     graphe à étudier
      * @return      ensemble des noeuds parcourus avec l'ordre de parcours conservé
      */
-    public static List<UndirectedNode> parcoursProfondeur2(UndirectedGraph g) {
+    public static List<UndirectedNode> parcoursProfondeurUndirected(UndirectedGraph g) {
         List<UndirectedNode> visited = new ArrayList<UndirectedNode>();
 
         for(UndirectedNode sommet : g.getNodes()) {
             if(!visited.contains(sommet)) {
-                visiterParcoursProfondeur2(sommet, visited, 0);
+                visiterParcoursProfondeurUndirected(sommet, visited, 0);
+            }
+        }
+
+        return visited;
+    }
+
+    public static List<DirectedNode> parcoursProfondeurDirected(DirectedGraph g) {
+        List<DirectedNode> visited = new ArrayList<DirectedNode>();
+
+        for(DirectedNode sommet : g.getNodes()) {
+            if(!visited.contains(sommet)) {
+                visiterParcoursProfondeurDirected(sommet, visited, 0);
             }
         }
 
@@ -80,12 +84,12 @@ public class TP2 {
     }
 
     /**
-     * Algorithme du parcours en profondeur à partir de l'algorithme ExplorerGraphe()
+     * Algorithme du parcours en profondeur d'un graphe orienté à partir de l'algorithme ExplorerGraphe()
      * @param s             sommet visité à cette itération
      * @param visited       ensemble des noeuds parcourus avec l'ordre de parcours conservé
      * @param profondeur    étage actuel de l'arbre construit à partir du graphe
      */
-    private static void visiterParcoursProfondeur2(UndirectedNode s, List<UndirectedNode> visited, int profondeur) {
+    private static void visiterParcoursProfondeurUndirected(UndirectedNode s, List<UndirectedNode> visited, int profondeur) {
         System.out.println("Profondeur : " + profondeur + ", noeud : " + s);
         visited.add(s);
 
@@ -101,11 +105,37 @@ public class TP2 {
 
             for(Map.Entry<UndirectedNode, Integer> neighbour : neighbours.entrySet()) {
                 if(!visited.contains(neighbour.getKey()))
-                    visiterParcoursProfondeur2(neighbour.getKey(), visited, profondeur + 1);
+                    visiterParcoursProfondeurUndirected(neighbour.getKey(), visited, profondeur + 1);
             } // Et je continue d'explorer mon arbre
         }
     }
 
+    /**
+     * Algorithme du parcours en profondeur d'un graphe orienté à partir de l'algorithme ExplorerGraphe() p
+     * @param s             sommet visité à cette itération
+     * @param visited       ensemble des noeuds parcourus avec l'ordre de parcours conservé
+     * @param profondeur    étage actuel de l'arbre construit à partir du graphe
+     */
+    private static void visiterParcoursProfondeurDirected(DirectedNode s, List<DirectedNode> visited, int profondeur) {
+        System.out.println("Profondeur : " + profondeur + ", noeud : " + s);
+        visited.add(s);
+
+        /*Map<UndirectedNode, Integer> neighbours = s.getNeighbours();
+
+        for(Map.Entry<UndirectedNode, Integer> neighbour : neighbours.entrySet()) {
+            if(!visited.contains(neighbour.getKey()))
+                visiterParcoursProfondeur2(neighbour.getKey(), visited);
+        }*/
+
+        if( s.getSuccs().size() > 0 ) { // Si il n'y a plus de de fils disponible, Je remonte d'un cran
+            Map<DirectedNode, Integer> neighbours = s.getSuccs(); // Sinon je récupère la liste des fils
+
+            for(Map.Entry<DirectedNode, Integer> neighbour : neighbours.entrySet()) {
+                if(!visited.contains(neighbour.getKey()))
+                    visiterParcoursProfondeurDirected(neighbour.getKey(), visited, profondeur + 1);
+            } // Et je continue d'explorer mon arbre
+        }
+    }
 
     // ------------------------------------------
     // 	  Algorithme de parcours en largeur
@@ -161,11 +191,11 @@ public class TP2 {
     // ------------------------------------------------------------
 
     /**
-     * Algorithme du parcours en profondeur au cas des composantes fortement connexes
+     * Algorithme du parcours en profondeur d'un graphe non orienté au cas des composantes fortement connexes
      * @param g     graphe à étudier
      * @return      ensemble des noeuds parcourus avec l'ordre de parcours conservé
      */
-    public static List<UndirectedNode> parcoursProfondeurCFC(UndirectedGraph g) {
+    public static List<UndirectedNode> parcoursProfondeurCFCUndirected(UndirectedGraph g) {
         //Ordre de parcours des noeuds visités
         List<UndirectedNode> visited = new ArrayList<UndirectedNode>();
 
@@ -186,7 +216,7 @@ public class TP2 {
 
         for(UndirectedNode sommet : g.getNodes()) {
             if(!visited.contains(sommet)) {
-                visiterParcoursProfondeurCFC(sommet, visited, visiteCFC, 0);
+                visiterParcoursProfondeurCFCUndirected(sommet, visited, visiteCFC, 0);
             }
         }
 
@@ -200,14 +230,14 @@ public class TP2 {
     }
 
     /**
-     * Algorithme du parcours en profondeur au cas des composantes fortement connexes
+     * Algorithme du parcours en profondeur d'un graphe non orienté au cas des composantes fortement connexes
      * @param s             sommet visité à cette itération
      * @param visited       ensemble des noeuds parcourus avec l'ordre de parcours conservé
      * @param visiteCFC     Classification dynamique du parcours du graphe
      *                      0 = non parcouru, 1 = détection de ses voisins, 2 = exploration compléte
      * @param profondeur    étage actuel de l'arbre construit à partir du graphe
      */
-    private static void visiterParcoursProfondeurCFC(UndirectedNode s, List<UndirectedNode> visited, int[] visiteCFC, int profondeur) {
+    private static void visiterParcoursProfondeurCFCUndirected(UndirectedNode s, List<UndirectedNode> visited, int[] visiteCFC, int profondeur) {
         System.out.println("Visite CFC Profondeur : " + profondeur + ", noeud : " + s);
         visited.add(s);
 
@@ -229,7 +259,7 @@ public class TP2 {
 
             for(Map.Entry<UndirectedNode, Integer> neighbour : neighbours.entrySet()) {
                 if(!visited.contains(neighbour.getKey()))
-                    visiterParcoursProfondeurCFC(neighbour.getKey(), visited, visiteCFC, profondeur + 1);
+                    visiterParcoursProfondeurCFCUndirected(neighbour.getKey(), visited, visiteCFC, profondeur + 1);
             } // Et on continue d'explorer l'arbre
         }
 
@@ -240,23 +270,105 @@ public class TP2 {
     }
 
 
+    /**
+     * Algorithme du parcours en profondeur d'un graphe orienté au cas des composantes fortement connexes
+     * @param g     graphe à étudier
+     * @return      ensemble des noeuds parcourus avec l'ordre de parcours conservé
+     */
+    public static List<DirectedNode> parcoursProfondeurCFCDirected(DirectedGraph g) {
+        //Ordre de parcours des noeuds visités
+        List<DirectedNode> visited = new ArrayList<DirectedNode>();
+
+        //Classification dynamique du parcours du graphe
+        //0 = non parcouru, 1 = détection de ses voisins, 2 = exploration compléte
+        int[] visiteCFC = new int[g.getNbNodes()];
+
+        debut = new int[g.getNbNodes()];
+        fin = new int[g.getNbNodes()];
+        compt = 0;
+
+        for(int i = 0; i < g.getNbNodes(); i++) {
+            visiteCFC[i] = 0;
+            debut[i] = 0;
+            fin[i] = 0;
+        }
+
+
+        for(DirectedNode sommet : g.getNodes()) {
+            if(!visited.contains(sommet)) {
+                visiterParcoursProfondeurCFCDirected(sommet, visited, visiteCFC, 0);
+            }
+        }
+
+        //Affichage CFC
+        System.out.println("Afficher CFC liste noeuds");
+        for(int i = 0; i < g.getNbNodes(); i++) {
+            System.out.println("Etat: " + visiteCFC[i] + ", debut: " + debut[i] + ", fin: " + fin[i]);
+        }
+
+        return visited;
+    }
+
+    /**
+     * Algorithme du parcours en profondeur d'un graphe orienté au cas des composantes fortement connexes
+     * @param s             sommet visité à cette itération
+     * @param visited       ensemble des noeuds parcourus avec l'ordre de parcours conservé
+     * @param visiteCFC     Classification dynamique du parcours du graphe
+     *                      0 = non parcouru, 1 = détection de ses voisins, 2 = exploration compléte
+     * @param profondeur    étage actuel de l'arbre construit à partir du graphe
+     */
+    private static void visiterParcoursProfondeurCFCDirected(DirectedNode s, List<DirectedNode> visited, int[] visiteCFC, int profondeur) {
+        System.out.println("Visite CFC Profondeur : " + profondeur + ", noeud : " + s);
+        visited.add(s);
+
+        debut[s.getLabel()] = compt;
+        compt++;
+
+
+        visiteCFC[s.getLabel()] = 1;
+
+        if( s.getNbSuccs() > 0 ) { // Si il n'y a plus de de fils disponible, Je remonte d'un cran
+            Map<DirectedNode, Integer> neighbours = s.getSuccs(); // Sinon je récupère la liste des fils
+
+            for(Map.Entry<DirectedNode, Integer> neighbour : neighbours.entrySet()) {
+                if(!visited.contains(neighbour.getKey()))
+                    visiterParcoursProfondeurCFCDirected(neighbour.getKey(), visited, visiteCFC, profondeur + 1);
+            } // Et on continue d'explorer l'arbre
+        }
+
+        visiteCFC[s.getLabel()] = 2;
+        fin[s.getLabel()] = compt;
+        compt++;
+
+    }
+
 
     public static void main(String[] args) {
         int[][] Matrix = GraphTools.generateGraphData(9, 20, false, false, true, 100001);
         GraphTools.afficherMatrix(Matrix);
-        UndirectedGraph al = new UndirectedGraph(Matrix);
-        System.out.println(al);
+        UndirectedGraph alUndirected = new UndirectedGraph(Matrix);
+        System.out.println(alUndirected);
+        DirectedGraph alDirected = new DirectedGraph(Matrix);
+        System.out.println(alDirected);
+
 
         //Question 20
         System.out.println("Question 20 - Affichage parcoursEnProfondeur");
-        System.out.println(parcoursProfondeur2(al));
+        System.out.println(parcoursProfondeurUndirected(alUndirected));
+        System.out.println(parcoursProfondeurDirected(alDirected));
 
         //Question 21
         System.out.println("Question 21 - Affichage parcoursEnLargeur");
-        System.out.println(parcoursLargeur(al, al.getNodes().get(0)));
+        System.out.println(parcoursLargeur(alUndirected, alUndirected.getNodes().get(0)));
 
         //Question 22 Composantes Fortement connexes
         System.out.println("Question 22 - Affichage CFC");
-        System.out.println(parcoursProfondeurCFC(al));
+        System.out.println(parcoursProfondeurCFCDirected(alDirected));
+
+        //Inverser le graphe
+        IDirectedGraph alDirectedInversed = alDirected.computeInverse();
+        //System.out.println(parcoursProfondeurCFCDirected(alDirectedInversed));
+
+
     }
 }
