@@ -129,10 +129,19 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
         return matrix;
     }
 
+    //TODO
     @Override
     public IDirectedGraph computeInverse() {
         DirectedGraph g = new DirectedGraph(this);
         // A completer
+
+        Map<DirectedNode, Integer> successors;
+        for (DirectedNode n : g.getNodes()) {
+            successors = n.getSuccs();
+            n.setSuccs(n.getPreds());
+            n.setPreds(successors);
+        }
+
         return g;
     }
 
@@ -156,5 +165,8 @@ public class DirectedGraph extends AbstractListGraph<DirectedNode> implements ID
         DirectedGraph al = new DirectedGraph(Matrix);
         System.out.println(al);
         // A completer
+
+        IDirectedGraph alInversed = al.computeInverse();
+        System.out.println(alInversed);
     }
 }
