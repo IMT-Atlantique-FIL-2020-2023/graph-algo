@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TP4 {
+public class TP4Prim {
 
     // ------------------------------------------
     // 	  Algorithme de PRIM
@@ -23,7 +23,6 @@ public class TP4 {
      *
      * @param graph graphe à étudier avec l'algorithme de PRIM
      * @return coût total du parcours avec l'algorithme de PRIM
-     *
      * @deprecated la version suivante se base sur les arêtes pour avoir un retour plus complet à exploiter
      */
     public static int algorithmePrimNodes(UndirectedValuedGraph graph) {
@@ -43,13 +42,13 @@ public class TP4 {
 
         //On commence à 1 car on a déjà un premier sommet parcouru dans A
         //On s'arrête à n - 1 car lors de l'étape n-1, on va atteindre le dernier sommet
-        for(int iteration = 1; iteration < graph.getNbNodes(); iteration++) {
+        for (int iteration = 1; iteration < graph.getNbNodes(); iteration++) {
             //choisir la branche avec un poids minimum
             AMinAll = primChercherPoidsMinNodes(A);
 
 
             //Détecter si le graphe est non connexe
-            if(AMinAll.size() == 0) {
+            if (AMinAll.size() == 0) {
                 isNotConnectedGraph = true;
                 break;
             }
@@ -57,8 +56,8 @@ public class TP4 {
             //Choisir le coût minimum pour cette itération
             costMin = Integer.MAX_VALUE;
             nodeMin = null;
-            for(Map.Entry<UndirectedNode, Integer> nodeCostEntry : AMinAll.entrySet()) {
-                if(nodeCostEntry.getValue() < costMin) {
+            for (Map.Entry<UndirectedNode, Integer> nodeCostEntry : AMinAll.entrySet()) {
+                if (nodeCostEntry.getValue() < costMin) {
                     costMin = nodeCostEntry.getValue();
                     nodeMin = nodeCostEntry.getKey();
                 }
@@ -68,7 +67,7 @@ public class TP4 {
             A.add(nodeMin);
         }
 
-        if(isNotConnectedGraph) {
+        if (isNotConnectedGraph) {
             System.out.println("Algorithme de PRIM nodes partiel (le graph est non connexe) à partir du somme de départ : coût = " + costTotal + " et ordre de parcours : " + A);
         } else {
             System.out.println("Algorithme de PRIM nodes : coût = " + costTotal + " et ordre de parcours : " + A);
@@ -79,24 +78,25 @@ public class TP4 {
 
     /**
      * Etape de l'algorithme de PRIM pour détecter les branches de poids minimum à chaque itération
+     *
      * @param A liste des noeuds déjà parcours
      * @return branches de poids minimum
      */
     private static HashMap<UndirectedNode, Integer> primChercherPoidsMinNodes(List<UndirectedNode> A) {
 
-        HashMap<UndirectedNode, Integer> AMinAll = new HashMap<>();; //Map des noeuds voisins de tous les noeuds parcourus
-        HashMap<UndirectedNode, Integer> AMinOne; //Map des noeuds voisins d'un noeud
-        for(UndirectedNode nodeParcouru : A) {
+        HashMap<UndirectedNode, Integer> AMinAll = new HashMap<>(); //Map des noeuds voisins de tous les noeuds parcourus
+        Map<UndirectedNode, Integer> AMinOne; //Map des noeuds voisins d'un noeud
+        for (UndirectedNode nodeParcouru : A) {
 
-            if(nodeParcouru != null && nodeParcouru.getNbNeigh() != 0) {
-                AMinOne = (HashMap) nodeParcouru.getNeighbours();
+            if (nodeParcouru != null && nodeParcouru.getNbNeigh() != 0) {
+                AMinOne = nodeParcouru.getNeighbours();
 
-                for(Map.Entry<UndirectedNode, Integer> nodeEntry : AMinOne.entrySet()) {
+                for (Map.Entry<UndirectedNode, Integer> nodeEntry : AMinOne.entrySet()) {
                     //On peut ignorer les voisins potentiels s'ils ont déjà été parcourus
-                    if(!A.contains(nodeEntry.getKey())) {
+                    if (!A.contains(nodeEntry.getKey())) {
                         //Si les voisins potentiels contiennent déjà un noeud à explorer, on compare quel coût serait le meilleur
-                        if(AMinAll.containsKey(nodeEntry.getKey())) {
-                            if(AMinAll.get(nodeEntry.getKey()) > nodeEntry.getValue())
+                        if (AMinAll.containsKey(nodeEntry.getKey())) {
+                            if (AMinAll.get(nodeEntry.getKey()) > nodeEntry.getValue())
                                 AMinAll.put(nodeEntry.getKey(), nodeEntry.getValue());
                         } else {
                             AMinAll.put(nodeEntry.getKey(), nodeEntry.getValue());
@@ -108,7 +108,6 @@ public class TP4 {
 
         return AMinAll;
     }
-
 
 
     /**
@@ -143,13 +142,13 @@ public class TP4 {
 
         //On commence à 1 car on a déjà un premier sommet parcouru dans A
         //On s'arrête à n - 1 car lors de l'étape n-1, on va atteindre le dernier sommet
-        for(int iteration = 1; iteration < graph.getNbNodes(); iteration++) {
+        for (int iteration = 1; iteration < graph.getNbNodes(); iteration++) {
             //choisir la branche avec un poids minimum
             AMinAll = primChercherPoidsMinEdges(A);
 
 
             //Détecter si le graphe est non connexe
-            if(AMinAll.size() == 0) {
+            if (AMinAll.size() == 0) {
                 isNotConnectedGraph = true;
                 break;
             }
@@ -157,51 +156,54 @@ public class TP4 {
             //Choisir le coût minimum pour cette itération
             costMin = Integer.MAX_VALUE;
             areteMin = null;
-            for(Map.Entry<Pair<UndirectedNode, UndirectedNode>, Integer> pairNodeCostEntry : AMinAll.entrySet()) {
-                if(pairNodeCostEntry.getValue() < costMin) {
+            for (Map.Entry<Pair<UndirectedNode, UndirectedNode>, Integer> pairNodeCostEntry : AMinAll.entrySet()) {
+                if (pairNodeCostEntry.getValue() < costMin) {
                     costMin = pairNodeCostEntry.getValue();
                     areteMin = pairNodeCostEntry.getKey();
                 }
             }
 
             costTotal += costMin;
+            assert areteMin != null;
             A.add(areteMin.getRight());
             listeAretes.add(areteMin);
         }
 
-        if(isNotConnectedGraph) {
+        if (isNotConnectedGraph) {
             System.out.println("Algorithme de PRIM edges partiel (le graph est non connexe) à partir du somme de départ : coût = " + costTotal + " et ordre de parcours : " + A + " et liste arêtes : " + listeAretes);
         } else {
             System.out.println("Algorithme de PRIM edges : coût = " + costTotal + " et ordre de parcours : " + A + " et liste arêtes : " + listeAretes);
         }
-        for(Pair<UndirectedNode, UndirectedNode> aretes : listeAretes) {
+        for (Pair<UndirectedNode, UndirectedNode> aretes : listeAretes) {
             System.out.println("Arete {" + aretes.getLeft() + "," + aretes.getRight() + "}");
         }
 
         //return costTotal;
-        return new Pair(costTotal, listeAretes);
+        return new Pair<>(costTotal, listeAretes);
     }
 
     /**
      * Etape de l'algorithme de PRIM pour détecter les branches de poids minimum à chaque itération
+     *
      * @param A liste des noeuds déjà parcours
      * @return branches de poids minimum sous la forme <noeud de départ, noeud d'arrivée>
      */
     private static HashMap<Pair<UndirectedNode, UndirectedNode>, Integer> primChercherPoidsMinEdges(List<UndirectedNode> A) {
 
-        HashMap<Pair<UndirectedNode, UndirectedNode>, Integer> AMinAll = new HashMap<>();; //Map des noeuds voisins de tous les noeuds parcourus
-        HashMap<UndirectedNode, Integer> AMinOne; //Map des noeuds voisins d'un noeud
-        for(UndirectedNode nodeParcouru : A) {
+        HashMap<Pair<UndirectedNode, UndirectedNode>, Integer> AMinAll = new HashMap<>(); //Map des noeuds voisins de tous les noeuds parcourus
+        Map<UndirectedNode, Integer> AMinOne; //Map des noeuds voisins d'un noeud
+        for (UndirectedNode nodeParcouru : A) {
 
-            if(nodeParcouru != null && nodeParcouru.getNbNeigh() != 0) {
-                AMinOne = (HashMap) nodeParcouru.getNeighbours();
+            if (nodeParcouru != null && nodeParcouru.getNbNeigh() != 0) {
+                AMinOne = nodeParcouru.getNeighbours();
 
-                for(Map.Entry<UndirectedNode, Integer> nodeEntry : AMinOne.entrySet()) {
+                for (Map.Entry<UndirectedNode, Integer> nodeEntry : AMinOne.entrySet()) {
                     //On peut ignorer les voisins potentiels s'ils ont déjà été parcourus
-                    if(!A.contains(nodeEntry.getKey())) {
+                    if (!A.contains(nodeEntry.getKey())) {
                         //Si les voisins potentiels contiennent déjà un noeud à explorer, on compare quel coût serait le meilleur
-                        if(AMinAll.containsKey(nodeEntry.getKey())) {
-                            if(AMinAll.get(nodeEntry.getKey()) > nodeEntry.getValue())
+                        Pair<UndirectedNode, UndirectedNode> p = new Pair<>(nodeParcouru, nodeEntry.getKey());
+                        if (AMinAll.containsKey(p)) {
+                            if (AMinAll.get(p) > nodeEntry.getValue())
                                 AMinAll.put(new Pair<>(nodeParcouru, nodeEntry.getKey()), nodeEntry.getValue());
                         } else {
                             AMinAll.put(new Pair<>(nodeParcouru, nodeEntry.getKey()), nodeEntry.getValue());
@@ -216,7 +218,7 @@ public class TP4 {
 
 
     public static void main(String[] args) {
-        int[][] Matrix = GraphTools.generateValuedGraphData(6, false, false, true, true, 102567);
+        int[][] Matrix = GraphTools.generateValuedGraphData(30, false, false, true, false, 100008);
         GraphTools.afficherMatrix(Matrix);
         UndirectedValuedGraph alUndirected = new UndirectedValuedGraph(Matrix);
         System.out.println(alUndirected);
