@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TP4 {
+public class TP4Prim {
 
     // ------------------------------------------
     // 	  Algorithme de PRIM
@@ -80,12 +80,12 @@ public class TP4 {
      */
     private static HashMap<UndirectedNode, Integer> primChercherPoidsMin(List<UndirectedNode> A) {
 
-        HashMap<UndirectedNode, Integer> AMinAll = new HashMap<>();; //Map des noeuds voisins de tous les noeuds parcourus
-        HashMap<UndirectedNode, Integer> AMinOne; //Map des noeuds voisins d'un noeud
+        HashMap<UndirectedNode, Integer> AMinAll = new HashMap<>(); //Map des noeuds voisins de tous les noeuds parcourus
+        Map<UndirectedNode, Integer> AMinOne; //Map des noeuds voisins d'un noeud
         for(UndirectedNode nodeParcouru : A) {
 
             if(nodeParcouru != null && nodeParcouru.getNbNeigh() != 0) {
-                AMinOne = (HashMap) nodeParcouru.getNeighbours();
+                AMinOne = nodeParcouru.getNeighbours();
 
                 for(Map.Entry<UndirectedNode, Integer> nodeEntry : AMinOne.entrySet()) {
                     //On peut ignorer les voisins potentiels s'ils ont déjà été parcourus
@@ -107,7 +107,7 @@ public class TP4 {
 
 
     public static void main(String[] args) {
-        int[][] Matrix = GraphTools.generateValuedGraphData(6, false, false, true, true, 100007);
+        int[][] Matrix = GraphTools.generateValuedGraphData(30, false, false, true, false, 100008);
         GraphTools.afficherMatrix(Matrix);
         UndirectedValuedGraph alUndirected = new UndirectedValuedGraph(Matrix);
         System.out.println(alUndirected);

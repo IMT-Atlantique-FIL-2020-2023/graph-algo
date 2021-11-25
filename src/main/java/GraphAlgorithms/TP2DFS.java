@@ -8,7 +8,7 @@ import Nodes.UndirectedNode;
 
 import java.util.*;
 
-public class TP2 {
+public class TP2DFS {
     //Voir la partie CFC
     private static int compt;
     private static int[] debut;
@@ -60,7 +60,7 @@ public class TP2 {
      * @return      ensemble des noeuds parcourus avec l'ordre de parcours conservé
      */
     public static List<UndirectedNode> parcoursProfondeurUndirected(UndirectedGraph g) {
-        List<UndirectedNode> visited = new ArrayList<UndirectedNode>();
+        List<UndirectedNode> visited = new ArrayList<>();
 
         for(UndirectedNode sommet : g.getNodes()) {
             if(!visited.contains(sommet)) {
@@ -72,7 +72,7 @@ public class TP2 {
     }
 
     public static List<DirectedNode> parcoursProfondeurDirected(DirectedGraph g) {
-        List<DirectedNode> visited = new ArrayList<DirectedNode>();
+        List<DirectedNode> visited = new ArrayList<>();
 
         for(DirectedNode sommet : g.getNodes()) {
             if(!visited.contains(sommet)) {
@@ -197,7 +197,7 @@ public class TP2 {
      */
     public static List<UndirectedNode> parcoursProfondeurCFCUndirected(UndirectedGraph g) {
         //Ordre de parcours des noeuds visités
-        List<UndirectedNode> visited = new ArrayList<UndirectedNode>();
+        List<UndirectedNode> visited = new ArrayList<>();
 
         //Classification dynamique du parcours du graphe
         //0 = non parcouru, 1 = détection de ses voisins, 2 = exploration compléte
@@ -277,7 +277,7 @@ public class TP2 {
      */
     public static List<DirectedNode> parcoursProfondeurCFCDirected(DirectedGraph g) {
         //Ordre de parcours des noeuds visités
-        List<DirectedNode> visited = new ArrayList<DirectedNode>();
+        List<DirectedNode> visited = new ArrayList<>();
 
         //Classification dynamique du parcours du graphe
         //0 = non parcouru, 1 = détection de ses voisins, 2 = exploration compléte
