@@ -113,7 +113,7 @@ public class TP4 {
         System.out.println(alUndirected);
 
 
-        //Question 5
+        //Question 5 avec une complexité O(n²)
         int costAlgoPrim = algorithmePrim(alUndirected);
 
 
