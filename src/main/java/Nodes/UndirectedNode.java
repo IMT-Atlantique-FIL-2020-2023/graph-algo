@@ -2,6 +2,7 @@ package Nodes;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by gsimonin on 05/01/2020.
@@ -55,4 +56,17 @@ public class UndirectedNode extends AbstractNode {
 		this.neighbours.put(v, val);
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        UndirectedNode that = (UndirectedNode) o;
+        return Objects.equals(super.getLabel(), that.getLabel());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.getLabel());
+    }
 }

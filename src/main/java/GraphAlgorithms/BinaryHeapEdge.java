@@ -67,7 +67,6 @@ public class BinaryHeapEdge {
             int posElement = 0; //position de l'élément à replacer
             int dest = getBestChildPos(posElement);
 
-            System.out.println("Remove() ");
             while (dest != -1 && dest < binh.size() && binh.get(posElement).getThird() >= binh.get(dest).getThird()) {
                 swap(posElement, dest);
                 posElement = dest;

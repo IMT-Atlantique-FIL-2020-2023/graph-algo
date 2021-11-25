@@ -223,19 +223,6 @@ public class GraphTools {
 		return mat;
 	}
 
-    public static List<Triple<UndirectedNode, UndirectedNode, Integer>> primBinaryHeapEdge(UndirectedGraph g, UndirectedNode s) {
-        int cost = 0;
-        Set<UndirectedNode> visited = new HashSet<>();
-        Set<Triple<UndirectedNode, UndirectedNode, Integer>> visitedEdges = new HashSet<>();
-
-        for (int i = 1; i < g.getNbNodes(); i++) {
-
-        }
-
-        return null;
-
-    }
-
 	public static void main(String[] args) {
 		int[][] mat = generateGraphData(10, 20, false, false, false, 100001);
 		afficherMatrix(mat);
