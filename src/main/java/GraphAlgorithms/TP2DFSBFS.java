@@ -8,7 +8,7 @@ import Nodes.UndirectedNode;
 
 import java.util.*;
 
-public class TP2DFS {
+public class TP2DFSBFS {
     //Voir la partie CFC
     private static int compt;
     private static int[] debut;
