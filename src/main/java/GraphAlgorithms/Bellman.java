@@ -9,6 +9,9 @@ import AdjacencyList.DirectedValuedGraph;
 import Collection.Pair;
 import Nodes.DirectedNode;
 
+/**
+ * Algorithme de Bellman pour chercher les plus courts chemins entre des sommets
+ */
 public final class Bellman {
 
     /**
@@ -29,7 +32,7 @@ public final class Bellman {
         //Atteindre soi-même coûte 0 au minimum (sauf dans le cas d'un graphe avec des valeurs impaires)
         distances.put(source, new Pair(source, 0));
 
-        //boucle principale
+        //Application de l'algorithme
         //On répète la boucle pour n-1 noeuds
         for (int i = 1; i < graph.getNbNodes()-1; i++){
             //On teste si on peut réduire le coût pour atteindre chaque sommet lors de cette itération
